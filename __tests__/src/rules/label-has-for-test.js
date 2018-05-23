@@ -165,5 +165,7 @@ ruleTester.run('label-has-for', rule, {
     { code: '<label>First Name</label>', errors: [expectedSomeError], options: optionsRequiredSome },
     { code: '<label>{children}</label>', errors: [expectedSomeError], options: optionsRequiredSome },
     { code: '<label>{children}</label>', errors: [expectedNestingError], options: optionsRequiredNesting },
+    { code: '<div><input type="text" id="howmuch" value="1" /><label htmlFor="howmuch">label</label></div>', errors: [expectedEveryError] },
+    { code: '<div><input type="text" id="howmuch" value="1" /><label htmlFor="howmuch">label<span /></label></div>', errors: [expectedEveryError] },
   ].map(parserOptionsMapper),
 });
