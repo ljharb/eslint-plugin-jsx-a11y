@@ -21,7 +21,7 @@ export default function ruleOptionsMapperFactory(ruleOptions: Array<mixed> = [])
       code,
       errors,
       // Flatten the array of objects in an array of one object.
-      options: [Object.fromEntries((options || []).concat(ruleOptions).flatMap((item) => Object.entries(item)))],
+      options: [Object.fromEntries((options || []).concat(ruleOptions).flatMap((item) => Object.entries((item: any))))],
       parserOptions,
       settings,
     };
