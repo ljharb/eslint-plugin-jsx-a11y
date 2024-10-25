@@ -14,17 +14,6 @@ import getSuggestion from '../util/getSuggestion';
 
 const ariaAttributes = aria.keys();
 
-const errorMessage = (name) => {
-  const suggestions = getSuggestion(name, ariaAttributes);
-  const message = `${name}: This attribute is an invalid ARIA attribute.`;
-
-  if (suggestions.length > 0) {
-    return `${message} Did you mean to use ${suggestions}?`;
-  }
-
-  return message;
-};
-
 const schema = generateObjSchema();
 
 export default {
@@ -32,6 +21,10 @@ export default {
     docs: {
       url: 'https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/HEAD/docs/rules/aria-props.md',
       description: 'Enforce all `aria-*` props are valid.',
+    },
+    messages: {
+      error: '{{name}}: This attribute is an invalid ARIA attribute.',
+      'error-with-suggestions': '{{name}}: This attribute is an invalid ARIA attribute. Did you mean to use {{suggestions}}?',
     },
     schema: [schema],
   },
@@ -45,12 +38,16 @@ export default {
         return;
       }
 
-      const isValid = aria.has(name);
+      if (!aria.has(name)) {
+        const suggestions = getSuggestion(name, ariaAttributes);
 
-      if (isValid === false) {
         context.report({
+          data: {
+            name,
+            suggestions,
+          },
+          messageId: suggestions.length === 0 ? 'error' : 'error-with-suggestions',
           node: attribute,
-          message: errorMessage(name),
         });
       }
     },
